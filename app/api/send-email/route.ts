@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
 
     // THE ACTUAL SENDING LOGIC
     await resend.emails.send({
-      from: 'Aviore <onboarding@resend.dev>', // Change this to your domain later
+      from: 'Aviore <noreply@aviore.space>', // Change this to your domain later
       to: recipient,
       subject: subject,
       html: `<p>You have a new submission from your website:</p>${emailBody}`,
