@@ -45,36 +45,25 @@ export function QuotationForm() {
     description: "",
   })
 
-  
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
 
     try {
-      const response = await fetch("https://api.web3forms.com/submit", {
+      const response = await fetch("/api/send-email", {
         method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "Accept": "application/json" 
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          access_key: "06634dd1-2631-4fe2-9f7c-f4d27042553f", // Use the key you just generated
-          subject: `Quotation Request from ${formData.firstName} ${formData.lastName}`,
-          from_name: "Aviore Website",
-          ...formData, // This sends all your inputs automatically
+          formType: "quotation",
+          ...formData,
         }),
       })
 
-      const result = await response.json()
-
-      if (result.success) {
+      if (response.ok) {
         setIsSubmitted(true)
-      } else {
-        alert("Submission failed. Please email contact@aviore.space directly.")
       }
     } catch (error) {
       console.error("Submission error:", error)
-      alert("Check your internet connection and try again.")
     } finally {
       setIsSubmitting(false)
     }

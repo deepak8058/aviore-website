@@ -1,11 +1,14 @@
 import { type NextRequest, NextResponse } from "next/server"
+import { Resend } from 'resend';
+
+// Initialize Resend with your API Key
+const resend = new Resend('re_6dYZqAP9_4qTSSZSWGR5kej7C6BUoNf1W');
 
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     const { formType, ...formData } = body
 
-    // Determine recipient based on form type
     let recipient = ""
     let subject = ""
 
@@ -16,42 +19,29 @@ export async function POST(request: NextRequest) {
         break
       case "feedback":
         recipient = "contact@aviore.space"
-        subject = `New Feedback: ${formData.subject}`
+        subject = `New Feedback from ${formData.email}`
         break
       case "inquiry":
         recipient = "contact@aviore.space"
-        subject = `New Inquiry: ${formData.subject}`
+        subject = `New Inquiry from ${formData.email}`
         break
       default:
         return NextResponse.json({ error: "Invalid form type" }, { status: 400 })
     }
 
-    // Format the email body
     const emailBody = Object.entries(formData)
-      .map(([key, value]) => `${key}: ${value}`)
-      .join("\n")
+      .map(([key, value]) => `<strong>${key}:</strong> ${value}`)
+      .join("<br/>")
 
-    // Log for debugging (in production, integrate with email service like Resend, SendGrid, etc.)
-    console.log("=== EMAIL SUBMISSION ===")
-    console.log("To:", recipient)
-    console.log("Subject:", subject)
-    console.log("Body:", emailBody)
-    console.log("========================")
+    // THE ACTUAL SENDING LOGIC
+    await resend.emails.send({
+      from: 'Aviore <onboarding@resend.dev>', // Change this to your domain later
+      to: recipient,
+      subject: subject,
+      html: `<p>You have a new submission from your website:</p>${emailBody}`,
+    });
 
-    // In production, you would integrate with an email service here
-    // Example with Resend:
-    // await resend.emails.send({
-    //   from: 'Aviore Website <noreply@aviore.space>',
-    //   to: recipient,
-    //   subject: subject,
-    //   text: emailBody,
-    // })
-
-    return NextResponse.json({
-      success: true,
-      message: "Form submitted successfully",
-      recipient, // For debugging
-    })
+    return NextResponse.json({ success: true })
   } catch (error) {
     console.error("Form submission error:", error)
     return NextResponse.json({ error: "Failed to submit form" }, { status: 500 })
