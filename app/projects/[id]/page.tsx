@@ -1,148 +1,74 @@
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, MapPin, Calendar, Layers } from "lucide-react"
+import { ArrowLeft, MapPin, Calendar } from "lucide-react"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
 import { projects } from "@/lib/projects-data"
 
-interface ProjectPageProps {
-  params: Promise<{ id: string }>
-}
-
-export default async function ProjectPage({ params }: ProjectPageProps) {
-  const { id } = await params
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params
+  const id = resolvedParams.id
   const project = projects.find((p) => p.id === id)
 
-  if (!project) {
-    notFound()
-  }
-
-  // Get related projects (same category, excluding current)
-  const relatedProjects = projects.filter((p) => p.category === project.category && p.id !== project.id).slice(0, 2)
+  if (!project) notFound()
 
   return (
     <main className="min-h-screen">
       <Navigation />
-
-      {/* Back Button */}
+      
+      {/* 1. Hero Section (Image Only) */}
       <section className="px-4 pt-28 md:px-8">
         <div className="mx-auto max-w-7xl">
-          <Link
-            href="/projects"
-            className="inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Projects
+          <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-muted-foreground mb-8">
+            <ArrowLeft className="h-4 w-4" /> Back to Projects
           </Link>
-        </div>
-      </section>
-
-      {/* Hero Image */}
-      <section className="px-4 py-8 md:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="relative aspect-[21/9] overflow-hidden rounded-3xl">
-            <img src={project.image || "/placeholder.svg"} alt={project.title} className="h-full w-full object-cover" />
+          <div className="relative aspect-[21/9] overflow-hidden rounded-3xl bg-secondary">
+            <img src={project.image} alt={project.title} className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
 
-      {/* Project Info */}
-      <section className="px-4 py-8 md:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-12 lg:grid-cols-3">
-            {/* Main Content */}
-            <div className="lg:col-span-2">
-              <span className="text-sm font-medium uppercase tracking-widest text-muted-foreground">
-                {project.category}
-              </span>
-              <h1 className="mt-4 font-serif text-4xl font-semibold tracking-tight text-foreground md:text-5xl text-balance">
-                {project.title}
-              </h1>
-              <p className="mt-6 text-lg leading-relaxed text-muted-foreground">{project.description}</p>
-
-              {/* Services */}
-              <div className="mt-10">
-                <h2 className="mb-4 font-serif text-xl font-medium text-foreground">Services Provided</h2>
-                <div className="flex flex-wrap gap-3">
-                  {project.services.map((service) => (
-                    <span
-                      key={service}
-                      className="rounded-full bg-secondary px-4 py-2 text-sm text-secondary-foreground"
-                    >
-                      {service}
-                    </span>
-                  ))}
-                </div>
-              </div>
+      {/* 2. Project Description Section */}
+      <section className="px-4 py-12 md:px-8">
+        <div className="mx-auto max-w-7xl grid gap-12 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <h1 className="font-serif text-4xl font-semibold mb-6">{project.title}</h1>
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed">{project.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {project.services.map(s => (
+                <span key={s} className="bg-secondary/80 border px-4 py-2 rounded-full text-sm font-medium">{s}</span>
+              ))}
             </div>
-
-            {/* Sidebar */}
-            <div className="lg:col-span-1">
-              <div className="glass rounded-2xl p-6">
-                <h3 className="mb-6 font-serif text-lg font-medium text-foreground">Project Details</h3>
-                <div className="space-y-4">
-                  <div className="flex items-start gap-3">
-                    <MapPin className="mt-0.5 h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Location</p>
-                      <p className="mt-1 text-sm text-foreground">{project.location}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Calendar className="mt-0.5 h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Completed</p>
-                      <p className="mt-1 text-sm text-foreground">{project.year}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start gap-3">
-                    <Layers className="mt-0.5 h-5 w-5 text-muted-foreground" />
-                    <div>
-                      <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Category</p>
-                      <p className="mt-1 text-sm text-foreground">{project.category}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8">
-                  <Button asChild className="w-full rounded-full">
-                    <Link href="/contact">Start Similar Project</Link>
-                  </Button>
-                </div>
+          </div>
+          <div className="lg:col-span-1">
+            <div className="glass p-8 rounded-2xl sticky top-32 border">
+              <h3 className="font-serif text-xl mb-6">Details</h3>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3 text-sm"><MapPin className="w-4 h-4 text-primary" /> {project.location}</div>
+                <div className="flex items-center gap-3 text-sm"><Calendar className="w-4 h-4 text-primary" /> {project.year}</div>
               </div>
+              <Button asChild className="w-full mt-8 rounded-full h-12 text-md font-bold"><Link href="/contact">Inquire Now</Link></Button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Related Projects */}
-      {relatedProjects.length > 0 && (
-        <section className="px-4 py-16 md:px-8">
+      {/* 3. New Showcase Section (Videos and Extra Images) */}
+      {project.galleryItems && project.galleryItems.length > 0 && (
+        <section className="px-4 py-16 md:px-8 bg-secondary/10 border-t">
           <div className="mx-auto max-w-7xl">
-            <h2 className="mb-8 font-serif text-2xl font-semibold text-foreground">Related Projects</h2>
+            <h2 className="font-serif text-3xl mb-12 text-center font-medium tracking-tight">Project Showcase</h2>
             <div className="grid gap-8 md:grid-cols-2">
-              {relatedProjects.map((related) => (
-                <Link
-                  key={related.id}
-                  href={`/projects/${related.id}`}
-                  className="group relative overflow-hidden rounded-2xl"
-                >
-                  <div className="relative aspect-[4/3]">
-                    <img
-                      src={related.image || "/placeholder.svg"}
-                      alt={related.title}
-                      className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent opacity-60" />
-                  </div>
-                  <div className="absolute inset-0 flex flex-col justify-end p-6">
-                    <span className="text-xs font-medium uppercase tracking-widest text-primary-foreground/70">
-                      {related.category}
-                    </span>
-                    <h3 className="mt-2 font-serif text-xl font-medium text-primary-foreground">{related.title}</h3>
-                  </div>
-                </Link>
+              {project.galleryItems.map((item, idx) => (
+                <div key={idx} className="rounded-2xl overflow-hidden bg-black shadow-2xl">
+                  {item.type === "video" ? (
+                    <video src={item.url} controls className="w-full aspect-video object-cover" />
+                  ) : (
+                    <img src={item.url} className="w-full aspect-video object-cover" alt="Installation detail" />
+                  )}
+                  {item.caption && <div className="p-4 bg-background border-t"><p className="text-sm font-medium">{item.caption}</p></div>}
+                </div>
               ))}
             </div>
           </div>
