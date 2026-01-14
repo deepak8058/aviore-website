@@ -6,16 +6,19 @@ import { Play, X, ChevronLeft, ChevronRight, Filter } from "lucide-react"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
 import { Button } from "@/components/ui/button"
-import { galleryItems, galleryCategories, type GalleryItem, type GalleryCategory } from "@/lib/gallery-data"
+import { projects as galleryItems, categories } from "@/lib/projects-data"
 import { cn } from "@/lib/utils"
 
 export default function GalleryPage() {
-  const [activeCategory, setActiveCategory] = useState<GalleryCategory>("all")
-  const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null)
+  const [activeCategory, setActiveCategory] = useState("All")
+  const [selectedItem, setSelectedItem] = useState<any>(null)
   const [showFilters, setShowFilters] = useState(false)
 
+  // Filter logic based on the new data structure
   const filteredItems =
-    activeCategory === "all" ? galleryItems : galleryItems.filter((item) => item.category === activeCategory)
+    activeCategory === "All" 
+      ? galleryItems 
+      : galleryItems.filter((item) => item.category === activeCategory)
 
   const currentIndex = selectedItem ? filteredItems.findIndex((item) => item.id === selectedItem.id) : -1
 
@@ -43,8 +46,7 @@ export default function GalleryPage() {
             Gallery
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Explore our portfolio of glass and aluminum installations across residential, commercial, and architectural
-            projects.
+            Explore our portfolio of glass and aluminum installations across residential, commercial, and architectural projects.
           </p>
         </div>
       </section>
@@ -52,7 +54,6 @@ export default function GalleryPage() {
       {/* Filter Bar */}
       <section className="px-4 pb-8 md:px-8 sticky top-24 z-40">
         <div className="mx-auto max-w-7xl">
-          {/* Mobile Filter Toggle */}
           <Button
             variant="outline"
             onClick={() => setShowFilters(!showFilters)}
@@ -62,21 +63,20 @@ export default function GalleryPage() {
             Filter by Category
           </Button>
 
-          {/* Filter Pills */}
           <div className={cn("flex flex-wrap gap-2", showFilters ? "block" : "hidden md:flex")}>
-            {galleryCategories.map((category) => (
+            {categories.map((category) => (
               <button
-                key={category.id}
+                key={category}
                 onClick={() => {
-                  setActiveCategory(category.id as GalleryCategory)
+                  setActiveCategory(category)
                   setShowFilters(false)
                 }}
                 className={cn(
                   "rounded-full px-4 py-2 text-sm font-medium transition-all",
-                  activeCategory === category.id ? "bg-primary text-primary-foreground" : "glass hover:bg-secondary",
+                  activeCategory === category ? "bg-primary text-primary-foreground" : "glass hover:bg-secondary",
                 )}
               >
-                {category.label}
+                {category}
               </button>
             ))}
           </div>
@@ -94,7 +94,7 @@ export default function GalleryPage() {
                   className="group relative w-full overflow-hidden rounded-xl"
                 >
                   <Image
-                    src={item.type === "video" ? item.thumbnail || "" : item.src}
+                    src={item.image}
                     alt={item.title}
                     width={800}
                     height={600}
@@ -109,8 +109,8 @@ export default function GalleryPage() {
                     </div>
                   </div>
 
-                  {/* Video Play Icon */}
-                  {item.type === "video" && (
+                  {/* Video Indicator - checks if there is at least one video in the galleryItems */}
+                  {item.galleryItems.some(media => media.type === "video") && (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white/90 text-primary shadow-lg">
                         <Play className="h-6 w-6 ml-1" />
@@ -121,19 +121,12 @@ export default function GalleryPage() {
               </div>
             ))}
           </div>
-
-          {filteredItems.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground">No items found in this category.</p>
-            </div>
-          )}
         </div>
       </section>
 
       {/* Lightbox Modal */}
       {selectedItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 p-4">
-          {/* Close Button */}
           <button
             onClick={() => setSelectedItem(null)}
             className="absolute top-4 right-4 text-white/80 hover:text-white z-10"
@@ -141,61 +134,43 @@ export default function GalleryPage() {
             <X className="h-8 w-8" />
           </button>
 
-          {/* Navigation */}
           {currentIndex > 0 && (
-            <button
-              onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white z-10"
-            >
+            <button onClick={goToPrevious} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white z-10">
               <ChevronLeft className="h-10 w-10" />
             </button>
           )}
           {currentIndex < filteredItems.length - 1 && (
-            <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white z-10"
-            >
+            <button onClick={goToNext} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/80 hover:text-white z-10">
               <ChevronRight className="h-10 w-10" />
             </button>
           )}
 
-          {/* Content */}
-          <div className="max-w-5xl w-full">
-            {selectedItem.type === "image" ? (
-              <Image
-                src={selectedItem.src || "/placeholder.svg"}
-                alt={selectedItem.title}
-                width={1200}
-                height={800}
-                className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
-              />
+          <div className="max-w-5xl w-full text-center">
+             {/* Show the first video if available, otherwise show the hero image */}
+            {selectedItem.galleryItems.some((m: any) => m.type === "video") ? (
+                <video 
+                    src={selectedItem.galleryItems.find((m: any) => m.type === "video").url} 
+                    controls 
+                    autoPlay 
+                    className="w-full h-auto max-h-[70vh] rounded-lg" 
+                />
             ) : (
-              <div className="aspect-video bg-black rounded-lg flex items-center justify-center">
-                {selectedItem.src ? (
-                  <video src={selectedItem.src} controls autoPlay className="w-full h-full rounded-lg" />
-                ) : (
-                  <div className="text-center text-white">
-                    <Play className="h-16 w-16 mx-auto mb-4 opacity-50" />
-                    <p>Video will play here</p>
-                    <p className="text-sm text-white/60 mt-2">Upload your video to enable playback</p>
-                  </div>
-                )}
-              </div>
+                <Image
+                    src={selectedItem.image}
+                    alt={selectedItem.title}
+                    width={1200}
+                    height={800}
+                    className="w-full h-auto max-h-[70vh] object-contain rounded-lg"
+                />
             )}
 
-            {/* Info */}
-            <div className="mt-4 text-center">
+            <div className="mt-4">
               <h3 className="text-xl font-medium text-white">{selectedItem.title}</h3>
-              <p className="text-white/70 mt-1">{selectedItem.description}</p>
-              <p className="text-sm text-white/50 mt-2">
-                {selectedItem.location} {selectedItem.year && `• ${selectedItem.year}`}
-              </p>
+              <p className="text-white/70 mt-1">{selectedItem.location} • {selectedItem.year}</p>
+              <Button asChild variant="link" className="text-primary mt-4">
+                <a href={`/projects/${selectedItem.id}`}>View Full Project Details</a>
+              </Button>
             </div>
-
-            {/* Counter */}
-            <p className="text-center text-white/50 mt-4 text-sm">
-              {currentIndex + 1} / {filteredItems.length}
-            </p>
           </div>
         </div>
       )}

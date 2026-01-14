@@ -1,102 +1,75 @@
-"use client"
-
-import { useState } from "react"
+import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowLeft, MapPin, Calendar } from "lucide-react"
 import { Navigation } from "@/components/navigation"
 import { Footer } from "@/components/footer"
-import { projects, categories } from "@/lib/projects-data"
+import { Button } from "@/components/ui/button"
+import { projects } from "@/lib/projects-data"
 
-export default function ProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState("All")
+export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
+  const project = projects.find((p) => p.id === id)
 
-  const filteredProjects =
-    activeCategory === "All" ? projects : projects.filter((project) => project.category === activeCategory)
+  if (!project) notFound()
 
   return (
     <main className="min-h-screen">
       <Navigation />
-
-      {/* Hero */}
-      <section className="px-4 pb-16 pt-32 md:px-8">
+      
+      <section className="px-4 pt-28 md:px-8">
         <div className="mx-auto max-w-7xl">
-          <p className="mb-4 text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground">Our Portfolio</p>
-          <h1 className="font-serif text-5xl font-semibold tracking-tight text-foreground md:text-6xl lg:text-7xl text-balance">
-            Projects That
-            <br />
-            <span className="italic">Define Excellence</span>
-          </h1>
-          <p className="mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-            Explore our collection of transformative glass and aluminum installations, each crafted with precision and
-            artistic vision.
-          </p>
-        </div>
-      </section>
-
-      {/* Filter */}
-      <section className="px-4 md:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="flex flex-wrap gap-3">
-            {categories.map((category) => (
-              <button
-                key={category}
-                onClick={() => setActiveCategory(category)}
-                className={`rounded-full px-5 py-2 text-sm font-medium transition-all ${
-                  activeCategory === category
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                }`}
-              >
-                {category}
-              </button>
-            ))}
+          <Link href="/projects" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8">
+            <ArrowLeft className="h-4 w-4" /> Back to Projects
+          </Link>
+          <div className="relative aspect-[21/9] overflow-hidden rounded-3xl bg-secondary">
+            <img src={project.image} alt={project.title} className="h-full w-full object-cover" />
           </div>
         </div>
       </section>
 
-      {/* Projects Grid */}
-      <section className="px-4 py-16 md:px-8">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-8 md:grid-cols-2">
-            {filteredProjects.map((project, index) => (
-              <Link
-                key={project.id}
-                href={`/projects/${project.id}`}
-                className={`group relative overflow-hidden rounded-2xl ${index === 0 ? "md:col-span-2" : ""}`}
-              >
-                <div className={`relative ${index === 0 ? "aspect-[21/9]" : "aspect-[4/3]"}`}>
-                  <img
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/20 to-transparent opacity-60 transition-opacity duration-300 group-hover:opacity-80" />
-                </div>
-
-                <div className="absolute inset-0 flex flex-col justify-end p-8">
-                  <div className="translate-y-4 transition-transform duration-300 group-hover:translate-y-0">
-                    <div className="mb-3 flex items-center gap-4">
-                      <span className="text-xs font-medium uppercase tracking-widest text-primary-foreground/70">
-                        {project.category}
-                      </span>
-                      <span className="text-xs text-primary-foreground/50">{project.year}</span>
-                    </div>
-                    <h3 className="font-serif text-2xl font-medium text-primary-foreground md:text-3xl">
-                      {project.title}
-                    </h3>
-                    <p className="mt-2 text-sm text-primary-foreground/70">{project.location}</p>
-                  </div>
-
-                  <div className="absolute right-8 top-8 flex h-12 w-12 items-center justify-center rounded-full bg-primary-foreground/20 opacity-0 backdrop-blur-sm transition-all duration-300 group-hover:opacity-100">
-                    <ArrowUpRight className="h-6 w-6 text-primary-foreground" />
-                  </div>
-                </div>
-              </Link>
-            ))}
+      <section className="px-4 py-12 md:px-8">
+        <div className="mx-auto max-w-7xl grid gap-12 lg:grid-cols-3">
+          <div className="lg:col-span-2">
+            <h1 className="font-serif text-4xl font-semibold mb-6">{project.title}</h1>
+            <p className="text-lg text-muted-foreground mb-8 text-balance">{project.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {project.services.map(s => (
+                <span key={s} className="bg-secondary px-4 py-2 rounded-full text-sm font-medium">{s}</span>
+              ))}
+            </div>
+          </div>
+          <div className="lg:col-span-1">
+            <div className="glass p-6 rounded-2xl sticky top-32">
+              <h3 className="font-serif text-lg mb-6">Project Information</h3>
+              <div className="space-y-4 text-sm">
+                <div className="flex gap-3 items-center"><MapPin className="w-4 h-4 text-primary" /> {project.location}</div>
+                <div className="flex gap-3 items-center"><Calendar className="w-4 h-4 text-primary" /> {project.year}</div>
+              </div>
+              <Button asChild className="w-full mt-8 rounded-full h-12 text-md font-semibold tracking-tight"><Link href="/contact">Inquire Now</Link></Button>
+            </div>
           </div>
         </div>
       </section>
 
+      {project.galleryItems.length > 0 && (
+        <section className="px-4 py-16 md:px-8 bg-secondary/10 border-t">
+          <div className="mx-auto max-w-7xl">
+            <h2 className="font-serif text-3xl mb-12 text-center font-medium">Project Showcase</h2>
+            <div className="grid gap-8 md:grid-cols-2">
+              {project.galleryItems.map((item, idx) => (
+                <div key={idx} className="rounded-2xl overflow-hidden bg-black shadow-xl">
+                  {item.type === "video" ? (
+                    <video src={item.url} controls className="w-full aspect-video object-cover" />
+                  ) : (
+                    <img src={item.url} className="w-full aspect-video object-cover" alt="Detail" />
+                  )}
+                  {item.caption && <div className="p-4 bg-background border-t"><p className="text-sm font-medium">{item.caption}</p></div>}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
       <Footer />
     </main>
   )
