@@ -43,7 +43,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ id: st
               {project.galleryItems && project.galleryItems.length > 0 && (
                 <div className="mt-20 space-y-12">
                   <h2 className="font-serif text-3xl font-medium border-b pb-4">Project Showcase</h2>
-                  <div className="grid gap-8">
+                  <div className="grid gap-4 md:grid-cols-3">
                     {project.galleryItems.map((item, idx) => (
                       <div key={idx} className="group rounded-[1.5rem] overflow-hidden bg-black shadow-xl">
                         {item.type === "video" ? (
