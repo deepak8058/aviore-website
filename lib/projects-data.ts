@@ -20,6 +20,7 @@ export const projects: Project[] = [
   {
     id: "jaipur-commercial-facade",
     title: "Commercial Glass Facade",
+    featured: true,
     category: "Commercial",
     description: "A striking blue reflective glass curtain wall system for a commercial building in Jaipur. This project showcases our expertise in large-scale facade installations.",
     image: "/images/image-205.jpg",
@@ -33,6 +34,7 @@ export const projects: Project[] = [
   {
     id: "luxury-courtyard-residence",
     title: "Luxury Courtyard Residence",
+    featured: true,
     category: "Residential",
     description: "Floor-to-ceiling sliding glass doors with elegant black aluminum frames, designed to seamlessly connect indoor living spaces with a traditional Jaipur courtyard.",
     image: "/images/image-x.jpg",
@@ -47,6 +49,7 @@ export const projects: Project[] = [
   {
     id: "modern-office-partitions",
     title: "Corporate Office Partitions",
+    featured: true,
     category: "Office",
     description: "Modern glass and aluminum partition systems creating an open yet organized workspace with sound insulation.",
     image: "/images/image-206.jpg",
@@ -73,6 +76,7 @@ export const projects: Project[] = [
   {
     id: "bay-window-residence",
     title: "Bay Window Installation",
+    featured: true,
     category: "Residential",
     description: "Custom corner bay window installation featuring white aluminum frames and energy-efficient glazing.",
     image: "/images/image-204.jpg",
@@ -98,6 +102,7 @@ export const projects: Project[] = [
   {
     id: "crystal-tower-facade",
     title: "Crystal Tower Facade",
+    featured: true,
     category: "Commercial",
     description: "A breathtaking 40-story curtain wall system featuring triple-glazed low-E glass panels with thermally broken aluminum frames.",
     image: "/modern-glass-skyscraper-facade-aluminum-frames-clo.jpg",
@@ -109,6 +114,7 @@ export const projects: Project[] = [
   {
     id: "museum-entrance",
     title: "Contemporary Art Museum",
+    featured: true,
     category: "Cultural",
     description: "Dramatic entrance pavilion featuring curved glass panels and custom aluminum mullions.",
     image: "/modern-museum-glass-entrance-curved-architecture.jpg",
