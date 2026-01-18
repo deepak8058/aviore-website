@@ -94,8 +94,8 @@ export default function AboutPage() {
               </div>
               <div className="glass absolute -bottom-6 -left-6 rounded-xl p-6 bg-black/40 backdrop-blur-md 
                 border border-white/10 shadow-2xl">
-                <p className="font-serif text-4xl font-semibold text-white">15+</p>
-                <p className="text-sm font-medium text-gray-300 uppercase tracking-wider">Years of Excellence</p>
+                <p className="font-serif text-4xl font-semibold text-black">15+</p>
+                <p className="text-sm font-medium text-black uppercase tracking-wider">Years of Excellence</p>
               </div>
             </div>
           </div>
