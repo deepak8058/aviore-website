@@ -29,23 +29,23 @@ const values = [
 
 const team = [
   {
-    name: "Alexander Chen",
-    role: "Founder & CEO",
+    name: "Shashank Jain",
+    role: "Partner & Interior Expert",
     image: "/professional-business-portrait-male-ceo-modern-off.jpg",
   },
   {
-    name: "Sarah Mitchell",
-    role: "Head of Design",
+    name: "Deepak Jain",
+    role: "Partner & Strategy Head",
     image: "/professional-business-portrait-female-designer-mod.jpg",
   },
   {
-    name: "Michael Roberts",
-    role: "Technical Director",
+    name: "Kritika Jain",
+    role: "Interior Architect",
     image: "/professional-business-portrait-male-engineer-moder.jpg",
   },
   {
-    name: "Emma Thompson",
-    role: "Project Manager",
+    name: "Shweta Jain",
+    role: "Sales & Admin",
     image: "/professional-business-portrait-female-manager-mode.jpg",
   },
 ]
@@ -87,7 +87,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-[4/5] overflow-hidden rounded-2xl">
                 <img
-                  src="/modern-architectural-glass-installation-workers-in.jpg"
+                  src="/aviore-at-work.jpg"
                   alt="Aviore team at work"
                   className="h-full w-full object-cover"
                 />
