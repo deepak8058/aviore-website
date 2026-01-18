@@ -51,12 +51,34 @@ const team = [
 ]
 
 const milestones = [
-  { year: "2009", event: "Aviore founded with a vision for architectural excellence" },
-  { year: "2012", event: "Completed first major commercial facade project" },
-  { year: "2015", event: "Expanded operations to West Coast" },
-  { year: "2018", event: "Launched sustainable glass solutions division" },
-  { year: "2021", event: "Achieved 200+ completed projects milestone" },
-  { year: "2024", event: "International expansion to UAE and Europe" },
+{ 
+    year: "1990", 
+    event: "Our family legacy began in Jaipur, establishing a foundation of trust in glass and aluminum craftsmanship." 
+  },
+  { 
+    year: "2005", 
+    event: "Transitioned into modern architectural works, focusing on high-precision aluminum window systems." 
+  },
+  { 
+    year: "2012", 
+    event: "Marked a major milestone with the successful completion of our first large-scale commercial facade project." 
+  },
+  { 
+    year: "2015", 
+    event: "Expanded our operations beyond Jaipur to reach major cities across Rajasthan." 
+  },
+  { 
+    year: "2021", 
+    event: "Achieved the milestone of 500+ completed projects, expanding our footprint to multiple states across India." 
+  },
+  { 
+    year: "2024", 
+    event: "Strengthened our pan-India presence with a dedicated focus on premium sustainable glass solutions." 
+  },
+  { 
+    year: "2025", 
+    event: "Rebranded the company as 'AVIORE'—redefining our heritage with a modern vision for architectural excellence." 
+  },
 ]
 
 export default function AboutPage() {
