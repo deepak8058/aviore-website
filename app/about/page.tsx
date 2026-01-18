@@ -92,9 +92,10 @@ export default function AboutPage() {
                   className="h-full w-full object-cover"
                 />
               </div>
-              <div className="glass absolute -bottom-6 -left-6 rounded-xl p-6">
-                <p className="font-serif text-4xl font-semibold text-foreground">15+</p>
-                <p className="text-sm text-muted-foreground">Years of Excellence</p>
+              <div className="glass absolute -bottom-6 -left-6 rounded-xl p-6 bg-black/40 backdrop-blur-md 
+                border border-white/10 shadow-2xl">
+                <p className="font-serif text-4xl font-semibold text-white">15+</p>
+                <p className="text-sm font-medium text-gray-300 uppercase tracking-wider">Years of Excellence</p>
               </div>
             </div>
           </div>
