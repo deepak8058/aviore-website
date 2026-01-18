@@ -87,7 +87,7 @@ export default function AboutPage() {
             <div className="relative">
               <div className="aspect-[4/5] overflow-hidden rounded-2xl">
                 <img
-                  src="/aviore-at-work.jpg"
+                  src="/images/aviore-at-work.jpg"
                   alt="Aviore team at work"
                   className="h-full w-full object-cover"
                 />
